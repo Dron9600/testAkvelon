@@ -26,7 +26,7 @@ public class ProjectService {
     }
 
     public void addProject(ProjectRecord projectRecord) {
-        mockRepository.save( projectRecord);
+        mockRepository.save(projectRecord);
     }
 
     public void deleteProject(Long id) {

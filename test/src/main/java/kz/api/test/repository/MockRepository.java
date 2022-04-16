@@ -22,6 +22,7 @@ public class MockRepository implements CrudRepository<ProjectRecord, Long> {
     @Override
     public <S extends ProjectRecord> S save(S entity) {
         System.out.println("attempt to add to DB the project record: " + entity.toString());
+        System.out.println("description status is: " + entity.getDescription().getStatus());
         localCache.put(entity.getId(), entity);
         return entity;
     }
