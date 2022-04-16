@@ -24,6 +24,7 @@ public class PostgresRepository implements CrudRepository<ProjectRecord, Long> {
             String updateSQL = "UPDATE projects SET name=(?), description=(?) WHERE id=(?)";
             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
             preparedStatement.setString(1, projectRecord.getName());
+            preparedStatement.setString(2, projectRecord.getDescription().getStatus());
             preparedStatement.setLong(3, projectRecord.getId());
             preparedStatement.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
@@ -40,6 +41,7 @@ public class PostgresRepository implements CrudRepository<ProjectRecord, Long> {
             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
             preparedStatement.setLong(1, entity.getId());
             preparedStatement.setString(2, entity.getName());
+            preparedStatement.setString(3, entity.getDescription().getStatus());
             preparedStatement.executeUpdate();
             return entity;
         } catch (ClassNotFoundException | SQLException e) {
