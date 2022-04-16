@@ -45,13 +45,13 @@ public class MockRepository implements CrudRepository<ProjectRecord, Long> {
     @Override
     public boolean existsById(Long aLong) {
         System.out.println("attempt to check DB for the project record presence with id: " + aLong);
-        return false;
+        return localCache.containsKey(aLong);
     }
 
     @Override
     public Iterable<ProjectRecord> findAll() {
         System.out.println("attempt to select from DB all project records");
-        return new ArrayList<>();
+        return localCache.values();
     }
 
     @Override
