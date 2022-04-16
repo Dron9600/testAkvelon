@@ -1,26 +1,33 @@
 package kz.api.test.model;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
-//@Entity
+@Entity
 @Embeddable
 public class Description {
 
-    String name10;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
+    String name;
     String status;
-    String descript;
+    String description;
     String priority;
 
-    public Description() {
+    public Description(Long id, String name, String status, String description, String priority) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.description = description;
+        this.priority = priority;
     }
 
-    public String getName10() {
-        return name10;
+    public String getName() {
+        return name;
     }
 
-    public void setName10(String name10) {
-        this.name10 = name10;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStatus() {
@@ -31,12 +38,12 @@ public class Description {
         this.status = status;
     }
 
-    public String getDescript() {
-        return descript;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescript(String descript) {
-        this.descript = descript;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getPriority() {
@@ -46,4 +53,5 @@ public class Description {
     public void setPriority(String priority) {
         this.priority = priority;
     }
+
 }

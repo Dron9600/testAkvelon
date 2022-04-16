@@ -4,33 +4,33 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class ProjectRecord
-{
-    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
-    private String name;
+public class ProjectRecord {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String name;
     @Embedded
-    private List<Description> description;
+    private Description description;
 
 
     public ProjectRecord() {
+
     }
 
-    public List<Description> getDescription() {
+    public Description getDescription() {
         return description;
     }
 
-    public void setDescription(List<Description> description) {
+    public void setDescription(Description description) {
         this.description = description;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,6 +41,5 @@ public class ProjectRecord
     public void setName(String name) {
         this.name = name;
     }
-
 
 }

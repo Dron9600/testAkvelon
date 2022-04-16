@@ -1,59 +1,44 @@
 package kz.api.test.service;
 
 import kz.api.test.model.ProjectRecord;
-import kz.api.test.repository.ProjectRepository;
+import kz.api.test.repository.MockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
-public class ProjectService
-{
-
+public class ProjectService {
 
     @Autowired
-    private ProjectRepository projectRepository;
+    private final MockRepository projectRepository; // For real postgres db connection use PostgresRepository class
 
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(MockRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
 
-
-    public List<ProjectRecord> getAllProjects()
-    {
+    public List<ProjectRecord> getAllProjects() {
         List<ProjectRecord>projectRecords = new ArrayList<>();
         projectRepository.findAll().forEach(projectRecords::add);
         return projectRecords;
     }
-//    public List<ProjectRecord> getAllProjects()
-//    {
-//        List<ProjectRecord>projectRecords = new ArrayList<>();
-//        projectRepository.findAll().forEach(projectRecords::add);
-//        return projectRecords;
-//    }
 
-//    public void addProject(List<ProjectRecord> projectRecord){
-//        projectRepository.save(projectRecord);
-//    }
-
-
-    public void addProject(List<ProjectRecord> projectRecord){
-        projectRepository.saveAll( projectRecord);
+    public void addProject(ProjectRecord projectRecord) {
+        projectRepository.save( projectRecord);
     }
 
 
-    public void deleteProject(String id) {
+    public void deleteProject(Long id) {
         projectRepository.deleteById(id);
     }
 
-    public ProjectRecord getProjectById(String id){
-        return projectRepository.findById(id).get();
+    public ProjectRecord getProjectById(Long id) {
+        return projectRepository.findById(id).orElse(null);
     }
 
-    public void saveOrUpdate(ProjectRecord projectRecord){
+    public void saveOrUpdate(ProjectRecord projectRecord) {
         projectRepository.save(projectRecord);
     }
+
 }

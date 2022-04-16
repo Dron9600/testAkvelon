@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sat Apr 16 21:47:40 ALMT 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0180-330e-f78b-000001379850 
+on database directory memory:/Users/atsaplin/Repository/github.com/dron9600/testAkvelon/test/39f4835b-db0d-4dc7-90ca-bf2348c5641f with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@251a69d7 
+Loaded from file:/Users/atsaplin/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=17.0.2+8-LTS-86
+user.dir=/Users/atsaplin/Repository/github.com/dron9600/testAkvelon/test
+os.name=Mac OS X
+os.arch=aarch64
+os.version=12.3
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
