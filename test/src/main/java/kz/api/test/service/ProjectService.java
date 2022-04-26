@@ -1,7 +1,7 @@
 package kz.api.test.service;
 
 import kz.api.test.model.ProjectRecord;
-import kz.api.test.repository.MockRepository;
+import kz.api.test.repository.PostgresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
@@ -13,32 +13,36 @@ import java.util.List;
 public class ProjectService {
 
     @Autowired
-    private final CrudRepository<ProjectRecord, Long> mockRepository; // For real postgres db connection use PostgresRepository class
+    private final CrudRepository<ProjectRecord, Long> postgresRepository; // For real postgres db connection use PostgresRepository class
 
-    public ProjectService(MockRepository projectRepository) {
-        this.mockRepository = projectRepository;
+    public ProjectService(PostgresRepository projectRepository) {  ///
+        this.postgresRepository = projectRepository;
     }
 
     public List<ProjectRecord> getAllProjects() {
         List<ProjectRecord>projectRecords = new ArrayList<>();
-        mockRepository.findAll().forEach(projectRecords::add);
+        postgresRepository.findAll().forEach(projectRecords::add);
         return projectRecords;
     }
 
     public void addProject(ProjectRecord projectRecord) {
-        mockRepository.save(projectRecord);
+        postgresRepository.save(projectRecord);
     }
 
     public void deleteProject(Long id) {
-        mockRepository.deleteById(id);
+        postgresRepository.deleteById(id);
     }
 
     public ProjectRecord getProjectById(Long id) {
-        return mockRepository.findById(id).orElse(null);
+        return postgresRepository.findById(id).orElse(null);
     }
 
     public void saveOrUpdate(ProjectRecord projectRecord) {
-        mockRepository.save(projectRecord);
+        postgresRepository.save(projectRecord);
+    }
+    
+    public void update(ProjectRecord projectRecord){
+        postgresRepository.save(projectRecord);
     }
 
 }

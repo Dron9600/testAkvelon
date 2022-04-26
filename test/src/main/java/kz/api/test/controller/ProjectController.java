@@ -34,5 +34,10 @@ public class ProjectController {
     private ProjectRecord getproject(@PathVariable("projectid") long projectId){
         return projectService.getProjectById(projectId);
     }
+    
+    @PostMapping("/update")
+    private void updateProject(@RequestBody ProjectRecord projectRecord){
+        projectService.update(projectRecord);
+    }
 
 }

@@ -10,21 +10,34 @@ public class ProjectRecord {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @Embedded
-    private Description description;
+    private String description;
 
+
+    @Embedded
+    private ProjectInformation  projectInformation;
+    @Embedded
+    private TaskInformation taskInformation;
 
     public ProjectRecord() {
-
     }
 
-    public Description getDescription() {
-        return description;
+    public ProjectInformation getProjectInformation() {
+        return projectInformation;
     }
 
-    public void setDescription(Description description) {
-        this.description = description;
+    public void setInformation(ProjectInformation projectInformation) {
+        this.projectInformation = projectInformation;
     }
+
+    public TaskInformation getTaskInformation() {
+        return taskInformation;
+    }
+
+    public void setTaskInformation(TaskInformation taskInformation) {
+        this.taskInformation = taskInformation;
+    }
+    
+    
 
     public Long getId() {
         return id;
@@ -41,5 +54,13 @@ public class ProjectRecord {
     public void setName(String name) {
         this.name = name;
     }
+    
+    
+        public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
