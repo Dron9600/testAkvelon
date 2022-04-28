@@ -37,11 +37,9 @@ public class ProjectService {
         return postgresRepository.findById(id).orElse(null);
     }
 
-    public void saveOrUpdate(ProjectRecord projectRecord) {
-        postgresRepository.save(projectRecord);
-    }
     
     public void update(ProjectRecord projectRecord){
+        postgresRepository.deleteById(projectRecord.getId());
         postgresRepository.save(projectRecord);
     }
 

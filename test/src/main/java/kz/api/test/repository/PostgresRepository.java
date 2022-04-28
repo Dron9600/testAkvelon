@@ -6,10 +6,7 @@ import kz.api.test.model.ProjectRecord;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -21,6 +18,7 @@ public class PostgresRepository implements CrudRepository<ProjectRecord, Long> {
     String url = testApplication.getUrl();
     String user = testApplication.getUser();
     String password = testApplication.getPassword();
+    String tableName = testApplication.getTableName();
     Connection connection;
 
 
@@ -29,29 +27,11 @@ public class PostgresRepository implements CrudRepository<ProjectRecord, Long> {
 
     private final Map<Long, ProjectRecord> localCache = new HashMap<>();
 
-    public void update(ProjectRecord projectRecord) {
-        try {
-            Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(url, user, password);
-            String updateSQL = "UPDATE projects SET name=(?), description=(?) WHERE id=(?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
-            preparedStatement.setString(1, projectRecord.getName());
-//            preparedStatement.setString(2, projectRecord.getInformation().getStatus());
-            preparedStatement.setLong(3, projectRecord.getId());
-            preparedStatement.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void createTable(String name){
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(url, user, password);
-//            String updateSQL = "CREATE TABLE (?)" +
-//                    "(personId int," +
-//                    "lastN varchar(255)" +
-//                    ");";
             String updateSQL = "CREATE TABLE " + name +
                     "\t(id bigint,\n" +
                     "\t name varchar(255),\n" +
@@ -68,37 +48,41 @@ public class PostgresRepository implements CrudRepository<ProjectRecord, Long> {
                     "\t);";
 
             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
-//            preparedStatement.setString(1, name);
             preparedStatement.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("successful test " + name );
+        System.out.println("creating tab  " + name );
     }
-    
     @Override
     public <S extends ProjectRecord> S save(S entity) {
-//        try {
-//            Class.forName("org.postgresql.Driver");
-//            connection = DriverManager.getConnection(url, user, password);
-//            String insertSQL = "INSERT INTO projects(id, name, description) VALUES(?,?,?)";
-//            PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
-//            preparedStatement.setLong(1, entity.getId());
-//            preparedStatement.setString(2, entity.getName());
-//            preparedStatement.setString(3, entity.getDescription().getStatus());
-//            preparedStatement.executeUpdate();
-//            return entity;
-//        } catch (ClassNotFoundException | SQLException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-        System.out.println(" complete save ");
-        localCache.put(entity.getId(), entity);
-        System.out.println(" it is data of the sooodffdf " + entity.getProjectInformation().getCompletionDate());
-        System.out.println(" value of the enum " + entity.getTaskInformation().getTaskStatus().getCode());
-        System.out.println(" value of the second enum " + entity.getProjectInformation().getCurrentStatus().getCode());
-        System.out.println(" url " + url + " " + password + " " + user);
-        return entity;
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(url, user, password);
+            String insertSQL = "INSERT INTO "  +tableName +
+                    " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertSQL);
+            preparedStatement.setLong(1, entity.getId());
+            preparedStatement.setString(2, entity.getName());
+            preparedStatement.setString(3, entity.getDescription());
+            preparedStatement.setString(4,entity.getProjectInformation().getProjectName());
+            preparedStatement.setString(5, entity.getProjectInformation().getProjectStart());
+            preparedStatement.setString(6,entity.getProjectInformation().getCompletionDate());
+            preparedStatement.setString(7, entity.getProjectInformation().getCurrentStatus().getCode());
+            preparedStatement.setInt(8, entity.getProjectInformation().getPriority());
+            preparedStatement.setString(9, entity.getTaskInformation().getTaskName());
+            preparedStatement.setString(10, entity.getTaskInformation().getTaskStatus().getCode());
+            preparedStatement.setString(11, entity.getTaskInformation().getTaskDescription());
+            preparedStatement.setInt(12, entity.getTaskInformation().getTaskPriority());
+            preparedStatement.executeUpdate();
+            localCache.put(entity.getId(), entity);
+            return entity;
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+//        System.out.println(" complete save ");
+//        return entity;
     }
 
     @Override
@@ -113,6 +97,42 @@ public class PostgresRepository implements CrudRepository<ProjectRecord, Long> {
 
     @Override
     public Optional<ProjectRecord> findById(Long aLong) {
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(url, user, password);
+            String deleteSQL = "SELECT * FROM "+ tableName +
+                    " WHERE id=(?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
+            preparedStatement.setLong(1, aLong);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                Long id = resultSet.getLong(1);
+                String name = resultSet.getString(2);
+                String description = resultSet.getString(3);
+                String projectName = resultSet.getString(4);
+                String projectStart = resultSet.getString(5);
+                String completionDate = resultSet.getString(6);
+                String currentStatus = resultSet.getString(7);
+                int priority =  resultSet.getInt(8);
+                String taskName = resultSet.getString(9);
+                String taskStatus = resultSet.getString(10);
+                String taskDescription = resultSet.getString(11);
+                int taskPriority = resultSet.getInt(12);
+                System.out.println(" id= " + id + " name= " + name
+                        + " description= " + description
+                + " projectName= " + projectName
+                + " projectStart= " + projectStart
+                + " completionDate= " + completionDate
+                + " currentStatus= " + currentStatus
+                + " priority= " + priority
+                + " taskName= " + taskName
+                + " taskStatus= " + taskStatus
+                + " taskDescription= " + taskDescription
+                + " taskPriority= " + taskPriority);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
         System.out.println("attempt to find at DB the project record with id: " + aLong);
         return Optional.of(localCache.get(aLong));
     }
@@ -143,16 +163,17 @@ public class PostgresRepository implements CrudRepository<ProjectRecord, Long> {
 
     @Override
     public void deleteById(@NotNull Long aLong) { 
-//        try {
-//            Class.forName("org.postgresql.Driver");
-//            connection = DriverManager.getConnection(url, user, password);
-//            String deleteSQL = "DELETE FROM projects WHERE id=(?)";
-//            PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
-//            preparedStatement.setLong(1, aLong);
-//            preparedStatement.executeUpdate();
-//        } catch (ClassNotFoundException | SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(url, user, password);
+            String deleteSQL = "DELETE FROM "+ tableName +
+                    " WHERE id=(?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteSQL);
+            preparedStatement.setLong(1, aLong);
+            preparedStatement.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
         System.out.println("attempt to remove from DB the project record with id: " + aLong);
     }
 
